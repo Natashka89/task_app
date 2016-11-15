@@ -27,14 +27,14 @@ class test_visit(unittest.TestCase):
             master = wd.find_element_by_xpath("//div[@class='y-list-item y-master-card__item']//h3[@class='y-master-card__master-name ng-binding']").text
             wd.find_elements_by_xpath("//div[@class='y-master-card__master-info']/i[@class='fa fa-angle-right y-item-arrow ng-scope']/a").click()
         else:
-            pass
+            master = wd.find_element_by_xpath("//div[@class='list-item-wrapper ng-scope']//h4[@class='ng-binding']").text
         # Выбрать услугу
         # И проверить, что услуга выбрана
         if not len(wd.find_elements_by_xpath("//i[@class='y-icon warn-color remove-button mdi mdi-close-circle-outline ng-scope']"))>0:
             wd.find_element_by_xpath("//h3[@class='service-title ng-binding']//i[@class='fa fa-angle-right y-item-arrow ng-scope']/a").click()
             wd.find_elements_by_xpath("//div[@class='service-card-wrapper']//i[@class='fa fa-angle-right y-item-arrow ng-scope']/a").click()
         else:
-            pass
+            service = wd.find_element_by_xpath("//div[@class='list-item-wrapper ng-scope']/h4[@class='services']").text
         # Проверить,что дата и время еще не выбраны
         if not len(wd.find_element_by_xpath("//div[@class='list-item-wrapper ng-scope']//i[@class='y-icon warn-color remove-button mdi mdi-close-circle-outline ng-scope']"))>0:
             wd.find_elements_by_xpath("//h3[@class='ng-binding']//i[@class='fa fa-angle-right y-item-arrow ng-scope']/a").click()
@@ -47,7 +47,8 @@ class test_visit(unittest.TestCase):
                 wd.find_elements_by_xpath("//div[@class='time-content ng-scope']//button{@class='y-button y-button_transparent time-slot ng-binding']").click()
                 time = wd.find_elements_by_xpath("//div[@class='time-content ng-scope']//button{@class='y-button y-button_transparent time-slot ng-binding']").text
         else:
-            pass
+            data = wd.find_element_by_xpath("//div[@class='list-item-wrapper ng-scope']//span[@class='ng-binding']").text
+            time = wd.find_elements_by_xpath("//div[@class='list-item-wrapper ng-scope']//span[@class='ng-binding ng-scope']").text
         # Переходим на форму оформления заказа
         wd.find_element_by_xpath("//button[text()='Оформить визит']").click()
         # Проверяем сообщения при пустой форме
@@ -65,9 +66,9 @@ class test_visit(unittest.TestCase):
         # Записываемся на прием
         wd.find_element_by_xpath("//button[text()='Записаться']").click()
         # Проверяем прием
-        assert wd.find_element_by_xpath("//h3[@class='y-record-card-full__service ng-binding ng-scope y-record-card-full__service_last']").text == '1. Маникюр'
+        assert wd.find_element_by_xpath("//h3[@class='y-record-card-full__service ng-binding ng-scope y-record-card-full__service_last']").text == '^\d$ $service'
         assert wd.find_element_by_xpath("//h3[@class='y-record-card-full__master-name ng-binding']").text == '$master'
-        assert wd.find_element_by_xpath("//div[@class='y-record-card-full__date ng-binding']").text == '$data'
+        assert wd.find_element_by_xpath("//div[@class='y-record-card-full__date ng-binding']").text == '$data 2016'
         assert wd.find_element_by_xpath("//div[@class='y-record-card-full__time ng-binding']").text == '$time'
         self.assertTrue(success)
 
